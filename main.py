@@ -48,7 +48,6 @@ class DwoVideoPlugin(Star):
                     Video.fromURL(video_url),
                     Plain("视频获取成功！")
                 ])
-
         except asyncio.TimeoutError:
             yield event.plain_result("视频请求超时，请重试")
         except aiohttp.ClientError as e:
