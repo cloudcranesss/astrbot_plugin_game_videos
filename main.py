@@ -1,6 +1,6 @@
 from astrbot.api.event import filter, AstrMessageEvent
 from astrbot.api.star import Context, Star, register
-from astrbot.core import logger
+from astrbot.api import logger
 from astrbot.api.message_components import Plain, Video
 import aiohttp
 import asyncio
@@ -82,6 +82,7 @@ class GameVideosPlugin(Star):
         """解析不同API的视频数据"""
         try:
             import random
+
             if "apiopen.top" in api_url:
                 # 处理新的响应格式
                 result = data.get("result", {})
@@ -166,7 +167,8 @@ class GameVideosPlugin(Star):
     @video_group.command("随机")
     async def get_random_video(self, event: AstrMessageEvent):
         """获取随机视频"""
-        await self.get_beauty_video(event)
+        async for result in self.get_beauty_video(event):
+            yield result
 
     @video_group.command("状态")
     async def check_plugin_status(self, event: AstrMessageEvent):
