@@ -19,7 +19,8 @@ class GameVideosPlugin(Star):
         # 配置参数
         self.api_urls = [
             "https://api.kuleu.com/api/MP4_xiaojiejie",
-            "https://api.apiopen.top/api/getMiniVideo"
+            "https://api.apiopen.top/api/getMiniVideo",
+            "https://api.52vmy.cn/api/video/tianmei"
         ]
         
         # 超时配置
@@ -80,16 +81,26 @@ class GameVideosPlugin(Star):
     def _parse_video_data(self, data: Dict[str, Any], api_url: str) -> Optional[Dict[str, Any]]:
         """解析不同API的视频数据"""
         try:
-            if "qqsuu.cn" in api_url:
-                video_url = data.get("video")
-                title = data.get("title", "美女视频")
-            elif "apiopen.top" in api_url:
+            import random
+            if "apiopen.top" in api_url:
+                # 处理新的响应格式
+                result = data.get("result", {})
+                video_list = result.get("list", [])
+                if video_list:
+                    # 随机选择一个视频
+                    video_data = random.choice(video_list)
+                    playurl = video_data.get("playurl", "")
+                    # 清理URL中的空格和引号
+                    video_url = playurl.replace("`", "").strip() if playurl else ""
+                    title = video_data.get("title", "短视频")
+                else:
+                    return None
+            elif "52vmy.cn" in api_url:
                 video_data = data.get("data", {})
-                video_url = video_data.get("url")
-                title = video_data.get("title", "短视频")
-            elif "vvhan.com" in api_url:
-                video_url = data.get("url")
-                title = data.get("title", "美女视频")
+                video_url = video_data.get("video", "")
+                # 清理URL中的空格和引号
+                video_url = video_url.replace("`", "").strip() if video_url else ""
+                title = "美女视频"
             else:
                 return None
                 
