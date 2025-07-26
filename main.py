@@ -18,9 +18,8 @@ class GameVideosPlugin(Star):
         
         # 配置参数
         self.api_urls = [
-            "https://api.qqsuu.cn/api/dm-xjj2",
-            "https://api.apiopen.top/api/getMiniVideo",
-            "https://api.vvhan.com/api/bgirl"
+            "https://api.kuleu.com/api/MP4_xiaojiejie",
+            "https://api.apiopen.top/api/getMiniVideo"
         ]
         
         # 超时配置
@@ -133,7 +132,7 @@ class GameVideosPlugin(Star):
                 "  video 状态 - 查看插件状态"
             )
 
-    @filter.command("video 美女")
+    @video_group.command("美女")
     async def get_beauty_video(self, event: AstrMessageEvent):
         """获取美女视频"""
         try:
@@ -153,12 +152,12 @@ class GameVideosPlugin(Star):
             logger.error(f"获取视频异常: {e}")
             yield event.plain_result("❌ 获取视频时出现错误")
 
-    @filter.command("video 随机")
+    @video_group.command("随机")
     async def get_random_video(self, event: AstrMessageEvent):
         """获取随机视频"""
         await self.get_beauty_video(event)
 
-    @filter.command("video 状态")
+    @video_group.command("状态")
     async def check_plugin_status(self, event: AstrMessageEvent):
         """检查插件状态"""
         status = (
